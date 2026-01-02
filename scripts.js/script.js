@@ -1,8 +1,10 @@
 const addBtn = document.getElementById("add");
 const input = document.getElementById("input");
 const addEditModal = document.getElementById("add-edit-modal");
+const modalTitle = document.querySelector(".modal-title h2");
 const closeBtn = document.querySelector(".close-btn");
 const pfp = document.querySelector(".pfp");
+const pfpInitial = document.querySelector(".pfp span");
 const enterNameInput = document.getElementById("enter-name");
 const enterNumberInput = document.getElementById("enter-number");
 const cancelBtn = document.getElementById("cancel");
@@ -14,15 +16,20 @@ const contactPreview = document.querySelector(".contact-preview");
 const emptyPreview = document.querySelector(".empty-preview");
 const searchBtn = document.getElementById("search");
 const mobilePreview = document.getElementById("mobile-preview");
+const pfpMobile = document.querySelector(".pfp-mobile");
 const closeBtnMobile = document.querySelector(".close-btn-mobile");
 const initialsMobile = document.querySelector(".initials-mobile");
 const nameMobile = document.querySelector(".name-mobile");
 const phoneMobile = document.querySelector(".phone-mobile");
 const editBtnMobile = document.querySelector(".edit-btn-mobile");
 const deleteBtnMobile = document.querySelector(".delete-btn-mobile");
+const overlay = document.getElementById("overlay");
 
 let contactsArray = [];
 let editId = null;
+
+const colorText = ["black", "hsl(43, 93%, 54%)"];
+const colorBackground = ["hsl(43, 93%, 54%)", "black"];
 
 const mobileQuery = window.matchMedia("(max-width: 769px)");
 
@@ -32,9 +39,13 @@ function updateView(e) {
   if (isMobile) {
     contactPreview.classList.add("hide");
     mobilePreview.classList.add("hide");
+    overlay.classList.remove("show");
+    document.body.style.overflow = "";
   } else {
     mobilePreview.classList.add("hide");
     contactPreview.classList.remove("hide");
+    overlay.classList.remove("show");
+    document.body.style.overflow = "";
   }
 }
 
@@ -43,6 +54,12 @@ mobileQuery.addEventListener("change", updateView);
 
 function add(value) {
   addEditModal.classList.remove("hide");
+
+  modalTitle.textContent = "Add Contact";
+
+  const randomNumber = Math.round(Math.random());
+  pfp.style.color = colorText[randomNumber];
+  pfp.style.backgroundColor = colorBackground[randomNumber];
 
   if (!value) {
     enterNameInput.value = "";
@@ -58,20 +75,39 @@ function add(value) {
 }
 
 function edit(e) {
+  mobilePreview.classList.add("hide");
   addEditModal.classList.remove("hide");
 
+  overlay.classList.remove("show");
+  document.body.style.overflow = "";
+
+  modalTitle.textContent = "Edit Contact";
+
+  const randomNumber = Math.round(Math.random());
+  pfp.style.color = colorText[randomNumber];
+  pfp.style.backgroundColor = colorBackground[randomNumber];
+
   contactsArray.forEach((contact) => {
-    if (`edit-${contact.id}` === e.target.id) {
+    if (
+      `edit-${contact.id}` === e.target.id ||
+      `edit-mobile-${contact.id}` === e.target.id
+    ) {
       editId = contact.id;
       enterNameInput.value = contact.name;
       enterNumberInput.value = contact.no;
+      pfpInitial.textContent = profilePicInit(contact.name);
     }
   });
 }
 
 function del(e) {
+  mobilePreview.classList.add("hide");
+
   contactsArray.forEach((contact, index) => {
-    if (`delete-${contact.id}` === e.target.id) {
+    if (
+      `delete-${contact.id}` === e.target.id ||
+      `delete-mobile-${contact.id}` === e.target.id
+    ) {
       contactsArray.splice(index, 1);
       syncDelete(contact.id);
     }
@@ -80,6 +116,8 @@ function del(e) {
   displayContacts();
   contactPreview.querySelectorAll(".preview").forEach((el) => el.remove());
   emptyPreview.classList.remove("hide");
+
+  displayContacts();
 }
 
 function profilePicInit(name) {
@@ -109,17 +147,25 @@ function displayContacts(list = contactsArray, isSearch = false) {
   list.forEach((c) => {
     const contact = document.createElement("button");
     contact.classList.add("contact");
+    contact.id = c.id;
 
     const name = document.createElement("p");
     name.textContent = c.name;
     contact.appendChild(name);
 
     const iconWrapper = document.createElement("div");
+    iconWrapper.classList.add("icons-wrapper");
 
     const call = document.createElement("button");
+    const callIcon = document.createElement("i");
+    callIcon.classList.add("fa-solid", "fa-phone");
+    call.appendChild(callIcon);
     iconWrapper.appendChild(call);
 
     const videoCall = document.createElement("button");
+    const videoCallIcon = document.createElement("i");
+    videoCallIcon.classList.add("fa-solid", "fa-video");
+    videoCall.appendChild(videoCallIcon);
     iconWrapper.appendChild(videoCall);
 
     contact.appendChild(iconWrapper);
@@ -130,6 +176,9 @@ function displayContacts(list = contactsArray, isSearch = false) {
 
   contactBtns.forEach((contactBtn) => {
     contactBtn.addEventListener("click", () => {
+      contactBtns.forEach((btn) => btn.classList.remove("active"));
+      contactBtn.classList.add("active");
+
       previewCard(contactBtn);
     });
   });
@@ -138,32 +187,43 @@ function displayContacts(list = contactsArray, isSearch = false) {
 function previewCard(c) {
   emptyPreview.classList.add("hide");
 
-  let nameKey = c.querySelector("p").textContent;
+  let idKey = c.id;
+  let nameKey;
   let phoneKey;
   let initKey;
 
   contactsArray.forEach((contact) => {
-    if (contact.name === nameKey) {
+    if (contact.id === idKey) {
+      nameKey = contact.name;
       phoneKey = contact.no;
       initKey = contact.pfp;
-      idKey = contact.id;
       return;
     }
   });
 
   if (mobileQuery.matches) {
     mobilePreview.classList.remove("hide");
+    overlay.classList.add("show");
+    document.body.style.overflow = "hidden";
     mobilePreview.querySelectorAll(".preview").forEach((el) => el.remove());
+
+    c.classList.remove("active");
 
     initialsMobile.textContent = initKey;
     nameMobile.textContent = `${nameKey}`;
     phoneMobile.textContent = `${phoneKey}`;
 
-    editBtnMobile.id = !editBtnMobile.id && `edit-${idKey}`;
-    deleteBtnMobile.id = !deleteBtnMobile.id && `delete-${idKey}`;
+    editBtnMobile.id = `edit-mobile-${idKey}`;
+    deleteBtnMobile.id = `delete-mobile-${idKey}`;
+
+    const randomNumber = Math.round(Math.random());
+    pfpMobile.style.color = colorText[randomNumber];
+    pfpMobile.style.backgroundColor = colorBackground[randomNumber];
 
     return;
   }
+
+  const randomNumber = Math.round(Math.random());
 
   contactPreview.querySelectorAll(".preview").forEach((el) => el.remove());
 
@@ -176,6 +236,8 @@ function previewCard(c) {
   initials.textContent = initKey;
   profilePic.classList.add("pfp");
   profilePic.classList.add("pfp-small");
+  profilePic.style.color = colorText[randomNumber];
+  profilePic.style.backgroundColor = colorBackground[randomNumber];
 
   const name = document.createElement("p");
   name.classList.add("justify");
@@ -197,14 +259,23 @@ function previewCard(c) {
 
   const btnsWrapper = document.createElement("div");
   btnsWrapper.classList.add("preview-btns-wrapper");
+
   const edit = document.createElement("button");
   edit.id = `edit-${idKey}`;
   edit.classList.add("edit-btn");
-  edit.textContent = "Edit";
+  const editIcon = document.createElement("i");
+  editIcon.classList.add("fa-solid", "fa-pen-to-square");
+  edit.appendChild(editIcon);
+  edit.innerHTML += "Edit";
+
   const del = document.createElement("button");
-  del.textContent = "Delete";
   del.id = `delete-${idKey}`;
   del.classList.add("delete-btn");
+  const delIcon = document.createElement("i");
+  delIcon.classList.add("fa-solid", "fa-trash");
+  del.appendChild(delIcon);
+  del.innerHTML += "Delete";
+
   btnsWrapper.appendChild(edit);
   btnsWrapper.appendChild(del);
 
@@ -279,6 +350,10 @@ function close() {
   enterNumberInput.value = "";
 }
 
+enterNumberInput.addEventListener("input", () => {
+  enterNumberInput.value = enterNumberInput.value.replace(/\D/g, "");
+});
+
 addBtn.addEventListener("click", () => {
   add(input.value.trim());
 });
@@ -286,6 +361,10 @@ addBtn.addEventListener("click", () => {
 addBtn2.addEventListener("click", () => {
   add();
 });
+
+editBtnMobile.addEventListener("click", (e) => edit(e));
+
+deleteBtnMobile.addEventListener("click", (e) => del(e));
 
 searchBtn.addEventListener("click", () => {
   if (!input.value.trim()) {
@@ -320,6 +399,8 @@ closeBtn.addEventListener("click", () => {
 
 closeBtnMobile.addEventListener("click", () => {
   mobilePreview.classList.add("hide");
+  overlay.classList.remove("show");
+  document.body.style.overflow = "";
 });
 
 cancelBtn.addEventListener("click", () => {
@@ -351,7 +432,7 @@ formSubmit.addEventListener("submit", (e) => {
     alert("Contact has been updated!");
   } else {
     const contact = {
-      id: Date.now(),
+      id: String(Date.now()),
       pfp: profilePicInit(enterNameInput.value),
       name: enterNameInput.value,
       no: enterNumberInput.value,

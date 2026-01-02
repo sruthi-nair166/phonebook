@@ -4,6 +4,15 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Phonebook</title>
+    <link rel="icon" type="image/x-icon" href="./images/favicon.ico" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+      rel="stylesheet"
+    />
     <link rel="stylesheet" href="./styles/styles.css" />
   </head>
   <body>
@@ -15,14 +24,14 @@
           placeholder="Enter a name or phone number"
           id="input"
         />
-        <button id="search">Search</button>
-        <button id="add">Add</button>
+        <button id="search" class="border-radius">Search</button>
+        <button id="add" class="border-radius">Add</button>
       </div>
 
       <div id="add-edit-modal" class="hide">
         <div class="modal-title">
           <h2>Add Contact</h2>
-          <button class="close-btn">X</button>
+          <button class="close-btn"><i class="fa-solid fa-x"></i></button>
         </div>
         <div class="modal-body">
           <div class="pfp"><span>?</span></div>
@@ -42,32 +51,38 @@
               required
             />
             <div class="btns-wrapper">
-              <button id="cancel">Cancel</button>
+              <button type="button" id="cancel">Cancel</button>
               <button type="submit" id="save">Save</button>
             </div>
           </form>
         </div>
       </div>
 
+      <div id="overlay"></div>
+
       <div id="mobile-preview" class="hide">
-        <button class="close-btn-mobile">X</button>
+        <button class="close-btn-mobile"><i class="fa-solid fa-x"></i></button>
 
         <div class="modal-body-mobile">
           <div class="pfp-mobile"><span class="initials-mobile"></span></div>
           <div>
             <p>
-              <span>Name:</span>
+              <span class="label">Name:</span>
               <span class="name-mobile"></span>
             </p>
 
             <p>
-              <span>Phone:</span>
+              <span class="label">Phone:</span>
               <span class="phone-mobile"></span>
             </p>
 
             <div class="btns-wrapper-mobile">
-              <button class="edit-btn-mobile">Edit</button>
-              <button class="delete-btn-mobile">Delete</button>
+              <button class="edit-btn-mobile">
+                <i class="fa-solid fa-pen-to-square"></i> Edit
+              </button>
+              <button class="delete-btn-mobile">
+                <i class="fa-solid fa-trash"></i> Delete
+              </button>
             </div>
           </div>
         </div>
