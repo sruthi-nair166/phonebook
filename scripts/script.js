@@ -102,6 +102,8 @@ function edit(e) {
 
 function del(e) {
   mobilePreview.classList.add("hide");
+  overlay.classList.remove("show");
+  document.body.style.overflow = "";
 
   contactsArray.forEach((contact, index) => {
     if (
@@ -431,10 +433,15 @@ formSubmit.addEventListener("submit", (e) => {
 
     alert("Contact has been updated!");
   } else {
+    if (!enterNameInput.value.trim()) {
+      alert("Name cannot be empty");
+      return;
+    }
+
     const contact = {
       id: String(Date.now()),
-      pfp: profilePicInit(enterNameInput.value),
-      name: enterNameInput.value,
+      pfp: profilePicInit(enterNameInput.value.trim()),
+      name: enterNameInput.value.trim(),
       no: enterNumberInput.value,
     };
 

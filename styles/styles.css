@@ -92,7 +92,7 @@ button {
   left: 50%;
   transform: translate(-50%, -50%);
   height: 90%;
-  width: 100%;
+  width: 90%;
   max-width: 600px;
   padding: 2rem 3rem;
   border-radius: 0.5rem;
@@ -351,7 +351,7 @@ form {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
-  border: 1px solid grey;
+  border: 1px solid rgb(189, 189, 189);
   background-color: rgb(255, 252, 235);
   margin: 0.5rem 0.5rem 0.5rem 0;
   padding: 2rem;
