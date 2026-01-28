@@ -28,6 +28,14 @@ Users can add new contacts using a modal form and search contacts by name or pho
 
 The application is connected to a mock REST API to persist contact data, supporting full CRUD operations.
 
+### UI/UX Decisions
+
+- Used a split list and detailed preview layout on desktop and modal-based contact preview on mobile to avoid cramming contact information into a single view and to allow detailed information to be viewed without cluttering the main list.
+
+- Placed primary actions (phone and video call buttons) directly in the list view for quick access, while keeping edit and delete actions within the preview/modal to reduce visual noise and prevent accidental actions.
+
+- Implemented clear UI states for empty contact list, no selected contact (in preview), successful add/edit/delete actions, and no search results, ensuring users always understand what’s happening in the interface.
+
 ### Built With
 
 - Semantic HTML5 markup
