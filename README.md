@@ -22,11 +22,27 @@ Live Site: [https://sruthi-nair166.github.io/phonebook/](https://sruthi-nair166.
 
 ### Overview
 
-This project is a responsive Phonebook web application that allows users to create, search, view, edit, and delete contacts. The interface adapts to different screen sizes, showing a split-list and preview layout on desktop and a modal-based contact preview on mobile devices for showing detailed contact information
+This project is a responsive Phonebook web application that allows users to manage contacts through a clean and adaptable interface across desktop and mobile devices.
 
-Users can add new contacts using a modal form and search contacts by name or phone number. Selecting a contact opens a popup modal with options to edit or delete the contact. The app also handles empty states clearly, showing appropriate messages when no contacts exist or when search results return no matches.
+### Features
 
-The application is connected to a mock REST API to persist contact data, supporting full CRUD operations.
+- **Responsive Layout with Device-Specific UI** <br />
+  Uses a split list-and-preview layout on desktop and a modal-based contact preview on mobile devices for viewing detailed contact information.
+
+- **Contact Management (CRUD)** <br />
+  Supports creating, viewing, editing, and deleting contacts through an intuitive interface.
+
+- **Add Contact via Modal Form** <br />
+  Allows users to add new contacts using a modal-based input form.
+
+- **Search Functionality** <br />
+  Enables searching contacts by name or phone number with real-time filtering.
+
+- **Contact Preview & Actions** <br />
+  Selecting a contact opens the preview for desktops and a popup modal for mobiles, displaying details along with edit and delete options.
+
+- **Mock REST API Integration** <br />
+  Persists contact data using a mock REST API, supporting full CRUD operations.
 
 ### UI/UX Decisions
 
